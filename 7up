@@ -1,0 +1,26 @@
+#!/bin/bash
+#Made by tin3w5
+TASK=$1
+KILLER=$?
+STATUS=`/usr/sbin/7con 1 $TASK`
+if [ "$STATUS" == '0' ]; then
+    echo "The Control not in the List!!!"
+    exit 127
+fi
+`/usr/sbin/7con 2 $TASK $OPT` &
+echo 'Starting...'
+STARTER=$?
+if  [ $STARTER -eq 0 ]; then
+    echo '  #############################'
+    echo '   #############################'
+    echo '    ###    Success.        ######'
+    echo '   #############################'
+    echo '  #############################'
+else
+    echo '  #############################'
+    echo ' #############################'
+    echo '####   Starting failed.  ####'
+    echo ' #############################'
+    echo '  #############################'
+    tail -15 /var/log/messages
+fi

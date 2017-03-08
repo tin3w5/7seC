@@ -1,0 +1,32 @@
+#!/bin/bash
+#Made by tin3w5
+TASK=$1
+OPT=$2
+KILLER=$?
+echo "Stoping the task(s) of $TASK"
+STATUS=`/usr/sbin/7con 1 $TASK $OPT`
+if [ "$STATUS" == '0' ]; then
+    echo "The Control not in the List!!!"
+    exit 127
+fi
+pkill -9 `/usr/sbin/7con 0 $TASK`
+if [ $KILLER -eq 0 ]; then
+    echo '  #############################'
+    echo "   #Stoped,starting the task...#"
+    echo '    #############################'
+    `/usr/sbin/7con 2 $TASK $OPT` &
+    STARTER=$?
+    if  [ $STARTER -eq 0 ]; then
+        echo '     #Success.                   #'
+        echo '      #############################'
+    else
+        echo '  #Starting failed.           #'
+        echo ' #############################'
+        tail -15 /var/log/messages
+    fi
+else
+    echo '    ##############################'
+    echo "   #Stop failed or unknow error.#"
+    echo '  ##############################'
+    tail -15 /var/log/messages
+fi

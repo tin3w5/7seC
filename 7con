@@ -1,0 +1,43 @@
+#!/bin/bash
+#Made by tin3w5
+COMMAND=$1
+EXEC=$2
+case "$EXEC" in
+named)
+NAME=named
+CONF=' -u named -c /usr/local/named/etc/named.conf'
+;;
+ss)
+NAME=ss-server
+EXEC='/usr/local/bin/ss-server'
+CONF=' -u -a ss -d 8.8.8.8 start& -c  /etc/ss/config.json '
+;;
+nginx)
+NAME=nginx
+CONF=' -c /etc/nginx/nginx.conf'
+;;
+php)
+NAME=php-fpm
+EXEC='/usr/local/php/sbin/php-fpm'
+CONF='-c /usr/local/php/lib/php.ini'
+;;
+dns)
+NAME=named
+EXEC='named'
+CONF=' -u named -c /usr/local/named/etc/named.conf'
+;;
+*)
+echo 0
+exit 2
+;;
+esac
+
+if [ $COMMAND = 1 ]; then
+    echo $EXEC
+elif [ $COMMAND = 2 ]; then
+    echo $EXEC $CONF
+elif [ $COMMAND = 0 ];then
+    echo $NAME
+else
+    echo 0
+fi

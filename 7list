@@ -1,0 +1,24 @@
+#!/bin/bash
+#Made by tin3w5
+TASK=$1
+KILLER=$?
+STATUS=`/usr/sbin/7con 0 $TASK`
+echo "The name of the Service is: $STATUS"
+if [ "$STATUS" == '0' ]; then
+    echo "The controlor not in the List!!!"
+    exit 127
+fi
+#RPS0=`ps -ef |grep $STATUS`
+#COUNT=`wc -l $RPS0`
+ps -ef |grep $STATUS >/tmp/.7sc.ps
+netstat -nutlop |grep $STATUS >/tmp/.7sc.net
+COUNT=`wc -l /tmp/.7sc.ps  |cut -d ' ' -f 1`
+PROCESSNUM=$[$COUNT-2]
+echo "The count of porcess are $PROCESSNUM"
+if [ $COUNT -gt 2 ]; then
+    echo "The Service is running"
+    cat /tmp/.7sc.ps
+    cat /tmp/.7sc.net
+else
+    echo "The service is stoped"
+fi
